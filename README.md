@@ -32,7 +32,6 @@ These fragments can be further characterized, visualized, or used in subsequent 
 ```plaintext
 .
 ├── 447.cif
-├── core.xyz
 ├── deCOFpose_explanation.ipynb #examlpe how to use the deCOFposition
 ├── l_n_test/                  # Folder for output images 
 ├── periodic_smiels.py         # Script for generating/manipulating periodic SMILES
