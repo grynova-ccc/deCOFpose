@@ -1,6 +1,6 @@
 # deCOFposition
 
-**deCOFpositon** The deCOFposition algorithm systematically decomposes periodic Covalent Organic Frameworks (COFs) into meaningful molecular fragments while preserving important chemical features (e.g., aromatic rings, π-conjugation). The workflow can be divided into five main steps:
+The deCOFposition algorithm systematically decomposes periodic Covalent Organic Frameworks (COFs) into meaningful molecular fragments while preserving important chemical features (e.g., aromatic rings, π-conjugation). The workflow can be divided into five main steps:
 
 
 i. Convert Periodic Structures to Finite Molecular Representations
