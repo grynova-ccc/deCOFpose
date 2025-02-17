@@ -49,7 +49,7 @@ def create_graph_from_bonds(mol, bond_ids):
                 shortest_path_all=len(shortest_path)
 
             if shortest_path_length <shortest_path_all+4:
-                print(shortest_path_length)
+                #print(shortest_path_length)
 
                 # Retrieve all paths of that length using the BFS method
                 all_paths_of_length = get_all_paths_of_length(mol, atom1_idx, atom2_idx, shortest_path_length)
@@ -58,7 +58,7 @@ def create_graph_from_bonds(mol, bond_ids):
                 if len(all_paths_of_length) == 1:
                     selected_path = shortest_path
                 else:
-                    print("yay")
+                    #print("yay")
                     all_paths_of_length = sorted(all_paths_of_length, key=lambda path: ''.join([mol.GetAtomWithIdx(atom_id).GetSymbol()[-1] for atom_id in path]))
                     selected_path = all_paths_of_length[0]
 
@@ -127,7 +127,7 @@ def find_smallest_labels(matrix):
 
     # Identify the smallest label based on its length
     smallest_label = min(flat_labels, key=len)
-    print(smallest_label)
+    #print(smallest_label)
     
 
     # Extract bonds with the smallest label or its inverse
@@ -232,7 +232,7 @@ def get_fragments_with_unique_ids(frags):
 
 
 def guilatine(mol, list_bonds):
-    #?
+
     with Chem.RWMol(mol) as rwmol:
         list_additional_h = []
         broke_id = 0
@@ -275,39 +275,39 @@ def guilatine(mol, list_bonds):
 
 def frag_func(out_frag):
     
-    fragy_list=[]
-    for fragy in out_frag:
-        print("yps")
-        for atom in fragy.GetAtoms():
+    fragment_list=[]
+    for fragment in out_frag:
+        #print("yps")
+        for atom in fragment.GetAtoms():
             if atom.GetAtomicNum() == 1:  # Hydrogen has atomic number 1
                 atom.SetIsotope(2)  # Set isotope to 2 for deuterium
-        #fragy.RemoveAllConformers()
-        Chem.SanitizeMol(fragy)
+        #fragment.RemoveAllConformers()
+        Chem.SanitizeMol(fragment)
         
-        #status = AllChem.EmbedMolecule(fragy, AllChem.ETKDGv2())
-        #status =AllChem.EmbedMolecule(fragy, AllChem.DistanceGeometry())
+        #status = AllChem.EmbedMolecule(fragment, AllChem.ETKDGv2())
+        #status =AllChem.EmbedMolecule(fragment, AllChem.DistanceGeometry())
         
 
-        status = AllChem.EmbedMolecule(fragy, useRandomCoords=True, useBasicKnowledge=False)
+        status = AllChem.EmbedMolecule(fragment, useRandomCoords=True, useBasicKnowledge=False)
         if status != -1:
-            AllChem.UFFOptimizeMolecule(fragy)
+            AllChem.UFFOptimizeMolecule(fragment)
 
-            #status=AllChem.EmbedMolecule(fragy, useBasicKnowledge=False, useExpTorsionAnglePrefs=False, useMacrocycleTorsion=False, useMacrocycle14config=False)
-            #AllChem.UFFOptimizeMolecule(fragy)
+            #status=AllChem.EmbedMolecule(fragment, useBasicKnowledge=False, useExpTorsionAnglePrefs=False, useMacrocycleTorsion=False, useMacrocycle14config=False)
+            #AllChem.UFFOptimizeMolecule(fragment)
 
 
-            #AllChem.MMFFOptimizeMolecule(fragy)
+            #AllChem.MMFFOptimizeMolecule(fragment)
 
             #if status == -1:
                 #print("Embedding failed!")
         else:
-            conf = fragy.GetConformer(0)
+            conf = fragment.GetConformer(0)
         coords_3d = []
-        conf = fragy.GetConformer(0)  # Get the generated 3D conformer
+        conf = fragment.GetConformer(0)  # Get the generated 3D conformer
         
-        for atom_idx in range(fragy.GetNumAtoms()):
+        for atom_idx in range(fragment.GetNumAtoms()):
             pos = conf.GetAtomPosition(atom_idx)
-            coords_3d.append((fragy.GetAtomWithIdx(atom_idx).GetSymbol(), pos.x, pos.y, pos.z))
+            coords_3d.append((fragment.GetAtomWithIdx(atom_idx).GetSymbol(), pos.x, pos.y, pos.z))
 
 
         xyz_str = "{}\n\n".format(len(coords_3d))  # Number of atoms at the start
@@ -337,12 +337,7 @@ def frag_func(out_frag):
                         use_atom_maps=False)
         fragmented=fragmented[0]
 
-
-
-        #conn_mol = Chem.Mol(raw_mol)
-        #rdDetermineBonds.DetermineBonds(conn_mol, charge=0)
-            # Transfer "used" and "broke_id" properties
-        for src_atom, tgt_atom in zip(fragy.GetAtoms(), fragmented.GetAtoms()):
+        for src_atom, tgt_atom in zip(fragment.GetAtoms(), fragmented.GetAtoms()):
             if src_atom.HasProp("used"):
                 tgt_atom.SetProp("used", src_atom.GetProp("used"))
             if src_atom.HasProp("broke_id"):
@@ -352,12 +347,8 @@ def frag_func(out_frag):
         fragmented.RemoveAllConformers()
         Chem.SanitizeMol(fragmented)
 
-
-
-
-
-        fragy_list.append(fragmented)
-    return fragy_list
+        fragment_list.append(fragmented)
+    return fragment_list
 
 
 def combine(list_mol):
@@ -380,14 +371,11 @@ def combine(list_mol):
             if i.GetUnsignedProp("used")==1 and i.HasProp("broke_id"):
                 first_atom=i
                 mol_t=i.GetUnsignedProp("mol_e")
-                print("one")
                 break
     for i in comb.GetAtoms():
         if i.HasProp("used")==True:
             if i.GetUnsignedProp("used")==2 and i.GetUnsignedProp("mol_e")!=mol_t and i.HasProp("broke_id"):
                 second_atom=i
-                
-                print("one2")
                 break
 
     with Chem.RWMol(comb) as rwmol:

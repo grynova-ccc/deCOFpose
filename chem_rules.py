@@ -102,7 +102,6 @@ class BaseRule(ABC):
 
 class Rule1(BaseRule):
     """
-    Directly adapted from your rule1_modified() function.
 
     The core logic:
       - Check for a bond that is C-N (6,7).
@@ -289,9 +288,7 @@ class Rule3(BaseRule):
         return False, bond.GetIdx()
 
     def _update_atom_props(self, rwmol, bond):
-        """
-        In your code, you typically set N as used=1, C as used=2
-        """
+
         a1 = bond.GetBeginAtom()
         a2 = bond.GetEndAtom()
 
