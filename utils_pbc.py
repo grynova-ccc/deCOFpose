@@ -9,6 +9,7 @@ import itertools
 import networkx as nx
 import sys
 
+#heavely inspired from https://github.com/jensengroup/xyz2mol/tree/master
 
 
 global __ATOM_LIST__

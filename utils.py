@@ -10,6 +10,9 @@ import networkx as nx
 import sys
 
 
+#taken from there from there https://github.com/jensengroup/xyz2mol/tree/master
+
+
 
 global __ATOM_LIST__
 __ATOM_LIST__ = \
