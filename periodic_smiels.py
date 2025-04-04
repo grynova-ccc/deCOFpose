@@ -62,8 +62,9 @@ def mol_to_periodic_smiles(mol,exteneded=True,isomeric=True):
 
     smiles = Chem.MolToSmiles(mol,isomericSmiles=isomeric,allHsExplicit=True)
     for bond in mol.GetBonds():
-        if bond.GetProp("isPeriodic")== "true":
-            periodic_bond_idxs.append(bond.GetIdx())
+        if bond.HasProp("isPeriodic"):
+            if bond.GetProp("isPeriodic")== "true":
+                periodic_bond_idxs.append(bond.GetIdx())
 
     if exteneded== True:
 
